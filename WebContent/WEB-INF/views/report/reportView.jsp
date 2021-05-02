@@ -3,11 +3,11 @@
 <%@page import="report.model.vo.RAttach"%>
 <%@page import="member.model.service.MemberService"%>
 <%@page import="java.util.List"%>
-
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<jsp:include page="/WEB-INF/views/common/header.jsp"/>
 
-<%@ include file="/WEB-INF/views/common/header.jsp" %>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/css/lightbox.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/js/lightbox.min.js"></script>
@@ -16,13 +16,6 @@
 	Member member = (Member)request.getAttribute("member");
 	List<RAttach> attachList = (List<RAttach>)request.getAttribute("attachList");
 
-	boolean editable = 
-				loginMember != null &&
-				(
-					loginMember.getMemberId().equals(member.getMemberId())
-					|| MemberService.ADMIN_ROLE.equals(loginMember.getMemberRole())
-					
-				);
 %>
 
   <!-- section시작 -->
@@ -34,7 +27,6 @@
                 		<h1 style="margin: 0 auto; padding: 300px 0 0 0; text-align: center;">No Photo</h1>
                 	<% }else{ 
                 		int slidePageNo = 1;
-                		
                 		for(RAttach attach : attachList){ %>
 		                <div class="mySlides fade">
 		                	<a href="<%=request.getContextPath() %>/upload/report/<%=attach.getRenamedFileName() %>" 
@@ -47,9 +39,9 @@
 						<a class="next" onclick="plusSlides(1)">&#10095;</a>
 						
 		                <div style="text-align:center; margin: 20px 0;">
-						<% for(RAttach attach : attachList){ %>
+		               <c:forEach items="${attachList}" var="attach">
 							<span class="dot" onclick="currentSlide(<%= slidePageNo++ %>)"></span> 
-						<% } %>	
+						</c:forEach>
 						</div>
                		<% } %>
 				</div>
@@ -59,39 +51,43 @@
             <div class="reporter-title">
             	<form id="targetMemberFrm" method="get" style="margin: 0; padding: 0;">
 	                <div class="reporter-icon" onclick="targetPage();" style="cursor: pointer;">
-						<% if(member.getIcon() == null || member.getIcon().isEmpty()){ %>
+	                <c:choose>
+	                <c:when test="${empty member.icon}">
 						<img src="<%= request.getContextPath() %>/img/icon1.jpg" alt="">
-						<% } else { %>
-						<img src="<%= request.getContextPath() %>/img/<%= member.getIcon() %>" alt="">
-						<% } %>
-						<input type="hidden" name="memberId" value="<%= member.getMemberId() %>"/>
+						</c:when>
+						<c:otherwise>
+						<img src="<%= request.getContextPath() %>/img/${member.icon}" alt="">
+						</c:otherwise>
+						</c:choose>
+						<input type="hidden" name="memberId" value="${member.memberId}"/>
 	                </div>
                 </form>
                 <div class="reporter-profile">
                     <div class="reporter-profile-info">
-                        <h3><%= member.getNickId() %></h3>
+                        <h3>${member.nickId}</h3>
                     </div>
                     <div class="target-profile-info">
-                        <h3>신고 대상 : <%= report.getMemberReportId() %></h3>
+                        <h3>신고 대상 : ${report.memberReportId}</h3>
                     </div>
                 </div>
             </div>
             <div class="commet-container">
-                <span><%= report.getContent() %></span>
+                <span>${report.content}</span>
             </div>
-             <%if(editable){ %>
+<c:if test="${not empty loginMember and loginMember.memberId eq member.memberId or loginMember.memberRole eq MemberService.ADMIN_ROLE}"> 
             <div class="market-up-del-container">
                 <input type="button" value="삭제" onclick="deleteReport()">
             </div>
-            <%} %>
+</c:if>
             
         </div>
     </section>
     <!-- section끝 -->
     
-<%if(editable){ %>
+
+<c:if test="${not empty loginMember and loginMember.memberId eq member.memberId or loginMember.memberRole eq MemberService.ADMIN_ROLE}">
 	<form 
-		action="<%=request.getContextPath()%>/report/reportDelete" 
+		action="<c:url value="/report/reportDelete"/>" 
 		method="post"
 		name="reportDelFrm">
 		<input type="hidden" name="no" value="<%= report.getReportNo() %>"/>
@@ -104,7 +100,8 @@
 		}
 	}
 	</script>
-<%} %>
+
+</c:if>
 <script>
 
 function targetPage() {
@@ -142,5 +139,4 @@ function targetPage() {
 		}
 		
 		</script>
-
-<%@ include file="/WEB-INF/views/common/footer.jsp" %>
+<jsp:include page="/WEB-INF/views/common/footer.jsp"/>

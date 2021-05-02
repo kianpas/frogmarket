@@ -45,8 +45,9 @@ public class MarketFinderServlet extends HttpServlet {
 				//헤더의 검색값가져오기
 //				String searchKeyword = request.getParameter("header-search");
 				request.getSession().setAttribute("searchKeyword", searchKeyword);
-				//2. 업무로직
 				
+				//2. 업무로직
+				System.out.println(searchKeyword);
 				List<Product> list = marketService.searchProductList(searchKeyword, start, end);
 				System.out.println("list@servlet = "+list);
 				
@@ -69,7 +70,7 @@ public class MarketFinderServlet extends HttpServlet {
 				//request.getSession().setAttribute("sList", sList);
 				request.setAttribute("pageBar", pageBar);
 				request.setAttribute("list", list);
-				request.setAttribute("searchKeyword", searchKeyword);
+				//request.setAttribute("searchKeyword", searchKeyword);
 				request.getRequestDispatcher("/WEB-INF/views/market/marketList.jsp")
 						.forward(request, response);
 	}

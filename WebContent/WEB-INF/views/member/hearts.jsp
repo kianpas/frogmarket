@@ -9,6 +9,6 @@
 
 <Hearts>
 	<heart>
-		<goodScore><%= m.getGoodScore() %></goodScore>
+		<goodScore>${member.goodScore}</goodScore>
 	</heart>
 </Hearts>

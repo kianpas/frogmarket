@@ -1,30 +1,30 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-	<% String graphKeyword = (String)request.getAttribute("graphKeyword"); %>
-<%@ include file="/WEB-INF/views/common/header.jsp"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<jsp:include page="/WEB-INF/views/common/header.jsp"/>
 
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.1.0/chart.min.js"></script> -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.js"></script> -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-<!--  <link rel="stylesheet"
-	href="<%=request.getContextPath()%>/css/chrt.css" />-->
-<!-- section시작 -->
 <section>
 	<div class="section-body black-section">
 		<div class="board black-board">
-		<%if(keyword == null && gKeyword == null){ %>
+		<c:choose> 
+		<c:when test="${empty searchKeyword}">
 			<div class="board" style="margin: 0 auto; margin-top: 80px;">
 				<h1 style="margin: 130px 0;">검색어를 입력해주세요 :)</h1>
 			</div>
-		<%}else { %>
+			 </c:when>
+		<c:otherwise> 
      		<canvas id="myChart" style="display:inline-block; width:800px; height:600px"></canvas>
-     	<%} %>
+     		</c:otherwise>
+     	 </c:choose>
 		</div>
 	</div>
 	<div>
-	<form name="graphForm" id="graphForm" action="<%=request.getContextPath() %>/graph/drawGraph" method="get"></form>
+	<form name="graphForm" id="graphForm" action="<c:url value="/graph/drawGraph"/>" method="get">
 		<input type="hidden" name="graphKeyword"/>
+		</form>
 	</div>
 </section>
 <!-- section끝 -->
@@ -41,7 +41,7 @@
     	chartDate = [];
     	
     	$.ajax({
-    	url : "<%=request.getContextPath() %>/graph/drawGraph",
+    	url : "<c:url value='/graph/drawGraph'/>",
     	success:function(dat){
     		if(dat!=null){
     		//json 값 분리하여 저장	
@@ -55,7 +55,7 @@
     			chartPrice.push(value.price);
     			chartDate.push(value.regDate);
     			
-    			console.log(".each에서 확인 "+"<%=graphKeyword%> ");
+    			
     			//데이터확인용
     			//console.log("레그 데이트 : " + value.regDate);
     		     //console.log(value);
@@ -191,8 +191,7 @@
     		        var label = chartData.labels[idx];
     		        var value = chartData.datasets[0].data[idx];
     		        var boardNo = label.split(" ")[0];
-					var url = location.origin + "<%=request.getContextPath()%>" 
-							+ "/market/marketView?no=" + boardNo;
+					var url = location.origin + "<c:url value='/market/marketView?no='/>" + boardNo;
 	
     		        console.log(url);
     		       // alert(url);
@@ -211,5 +210,4 @@
     });
     
   </script>
-
-<%@ include file="/WEB-INF/views/common/footer.jsp"%>
+<jsp:include page="/WEB-INF/views/common/footer.jsp"/>

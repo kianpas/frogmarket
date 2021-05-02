@@ -1,18 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
 <title>Frog Market</title>
 <link rel="stylesheet"
-	href="<%= request.getContextPath() %>/css/style.css" />
-<script src="<%= request.getContextPath() %>/js/jquery-3.6.0.js"></script>
+	href="<c:url value="/css/style.css"/>" />
+<script src="<c:url value="/js/jquery-3.6.0.js"/>"></script>
 </head>
 <body>
     <h1 class="mini-title">Account</h1>
     <div class="account-container">
     
-        <form id="accountForm" class="account-form" action="<%= request.getContextPath() %>/member/account" method="post">
+        <form id="accountForm" class="account-form" action="<c:url value="/member/account"/>" method="post">
             <label for="">아이디</label><input type="text" name="memberId" id="member_id" value="" onKeypress="if(event.keyCode == 13) accountFunction()">
             <label for="">비밀번호</label><input type="password" name="password" id="password" onKeypress="if(event.keyCode == 13) accountFunction()">
             <label for="">비밀번호 확인</label><input type="password" name="password_check" id="password_check" onKeypress="if(event.keyCode == 13) accountFunction()">
@@ -22,8 +23,8 @@
         	<input type="hidden" name="icon" id="icon">
         <hr>
         <div class="btns">
-            <input type="button" name="cancle" id="cancelButton" value="cancel" onclick="cancelFunction()">
         	<input type="button" name="" id="accountSubmit" value="submit" onclick="accountFunction();">
+            <input type="button" name="cancle" id="cancelButton" value="cancel" onclick="cancelFunction()">
         </div>
         </form>
     </div>

@@ -1,41 +1,45 @@
 <%@page import="java.util.Arrays"%>
 <%@page import="java.util.List"%>
-<%@page import="java.sql.Date"%>
-<%@page import="member.model.vo.Member"%>
-<%@page import="member.model.service.MemberService"%>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%
-	Member member = (Member)request.getAttribute("targetMember");
-%>
-<%@ include file="/WEB-INF/views/common/header.jsp"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<jsp:include page="/WEB-INF/views/common/header.jsp"/>
+
 
 <!-- section시작 -->
-<section>
+<section class="member-container">
 	<div class="my-container">
 		<!-- 프로필뷰 시작 -->
 		<div class="my-profile-view">
 			<div class="my-profile-icon">
 				<div class="my-icon-img">
-					<% if(member.getIcon() == null || member.getIcon().isEmpty()){ %>
-					<img src="<%= request.getContextPath() %>/img/icon1.jpg" alt="">
-					<% } else { %>
-					<img src="<%= request.getContextPath() %>/img/<%= member.getIcon() %>" alt="">
-					<% } %>
+				  <c:choose>
+				  <c:when test="${empty targetMember.icon}">
+				
+					<img src="<c:url value="/img/icon1.jpg"/>" alt="">
+					</c:when>
+					<c:otherwise>
+					
+					<img src="<c:url value="/img/${targetMember.icon}"/>" alt="">
+					
+					</c:otherwise>
+					</c:choose>
 				</div>
 				<div class="my-profile-nick">
-					<h3><%= member.getNickId() %></h3>
+					<h3>${targetMember.nickId}</h3>
 				</div>
 			</div>
 			<div class="my-mini-container">
 				<div class="my-profile-good">
 					<div class="heart" onclick="addHeart();" style="cursor: pointer;">
-						<img src="<%= request.getContextPath() %>/img/free-icon-hearts-138533.png" alt="">
+						<img src="<c:url value="/img/free-icon-hearts-138533.png"/>" alt="">
 					</div>
-					<h3> : <%= member.getGoodScore() %></h3>
+					<h3> : ${targetMember.goodScore}</h3>
 				</div>
 				<div class="my-profile-market-count">
-					<h3>아이디 : @<%= member.getMemberId() %></h3>
+					<h3>아이디 : @${targetMember.memberId}</h3>
 				</div>
 			</div>
 		</div>
@@ -55,7 +59,7 @@
 	</div>
 </section>
 <!-- section끝 -->
-<form action="<%= request.getContextPath() %>/member/cartList" method="post" name="cartListFrm">
+<form action="<c:url value="/member/cartList"/>" method="post" name="cartListFrm">
 	<input type="hidden" name="memberId" value="honggd"/>
 </form>
 <script>
@@ -63,8 +67,8 @@
 	function getProduct(){
 
 		$.ajax({
-			url: "<%=request.getContextPath()%>/market/marketTarget",
-			data: { "memberId" : "<%= member.getMemberId() %>"},
+			url: "<c:url value='/market/marketTarget'/>",
+			data: { "memberId" : "${targetMember.memberId}"},
 			dataType: "text",
 			success : function(data) {
 				console.log(data);
@@ -83,9 +87,9 @@
 <script>
 
 function addHeart(){
-	var $id = "<%= member.getMemberId() %>";
+	var $id = "${targetMember.memberId}";
 	$.ajax({
-		url: "<%=request.getContextPath()%>/member/AddHeart",
+		url: "<c:url value='/member/AddHeart'/>",
 		data: {"memberId" : $id},
 		success : function(data) {
 			
@@ -105,5 +109,4 @@ function addHeart(){
 };
 
 </script>
-
-<%@ include file="/WEB-INF/views/common/footer.jsp" %>
+<jsp:include page="/WEB-INF/views/common/footer.jsp"/>

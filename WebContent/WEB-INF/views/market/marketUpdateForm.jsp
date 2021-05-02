@@ -3,7 +3,8 @@
 <%@page import="market.model.vo.Product"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/common/header.jsp" %>
+ <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<jsp:include page="/WEB-INF/views/common/header.jsp"/>
 <%
 	Product product = (Product)request.getAttribute("product");
 	List<pAttach> attachList = (List<pAttach>)request.getAttribute("attachList"); 
@@ -19,40 +20,41 @@
                     <h1>상품수정</h1>
                     <!-- writer의 value는 oneman대신 loginMember의 getId를 해야 함. -->
                     <input type="hidden" name="writer" value="oneman"/>
-                    <input type="hidden" name="no" value="<%=product.getNo()%>"/>
+                    <input type="hidden" name="no" value="${product.no}"/>
                     
                     <select name="status">
-                        <option value="new" <% if("new".equals(product.getStatus()) ){ %>selected <%} %>>판매중</option>
-                        <option value="reserved" <% if("reserved".equals(product.getStatus()) ){ %>selected <%} %>>예약중</option>
-                        <option value="soldout" <% if("soldout".equals(product.getStatus()) ){ %>selected <%} %>>판매 완료</option>
+                        <option value="new" ${product.status eq 'new'? 'selected' : ''}>판매중</option>
+                        <option value="reserved" ${product.status eq 'reserved'? 'selected' : ''}>예약중</option>
+                        <option value="soldout" ${product.status eq 'soldout'? 'selected' : ''}>판매 완료</option>
                     </select>
                     <select name="local">
                         <option value="">지역 선택</option>
-                        <option value="서울" <% if("서울".equals(product.getArea()) ){ %>selected <%} %>>서울</option>
-                        <option value="인천" <% if("인천".equals(product.getArea()) ){ %>selected <%} %>>인천</option>
-                        <option value="대구" <% if("대구".equals(product.getArea()) ){ %>selected <%} %>>대구</option>
-                        <option value="대전" <% if("대전".equals(product.getArea()) ){ %>selected <%} %>>대전</option>
-                        <option value="부산" <% if("부산".equals(product.getArea()) ){ %>selected <%} %>>부산</option>
-                        <option value="순천" <% if("순천".equals(product.getArea()) ){ %>selected <%} %>>순천</option>
-                        <option value="강원도" <% if("강원도".equals(product.getArea()) ){ %>selected <%} %>>강원도</option>
+                        <option value="서울"  ${product.area eq '서울'? 'selected' : ''}>서울</option>
+                        <option value="인천" ${product.area eq '인천'? 'selected' : ''}>인천</option>
+                        <option value="대구" ${product.area eq '대구'? 'selected' : ''}>대구</option>
+                        <option value="대전" ${product.area eq '대전'? 'selected' : ''}>대전</option>
+                        <option value="부산" ${product.area eq '부산'? 'selected' : ''}>부산</option>
+                        <option value="순천" ${product.area eq '순천'? 'selected' : ''}>순천</option>
+                        <option value="강원도" ${product.area eq '강원도'? 'selected' : ''}>강원도</option>
                     </select>
                 </div>
                 <div class="add-product-title">
-                    <input value="<%=product.getTitle() %>" type="text" name="title" id="title" required>
+                    <input value="${product.title}" type="text" name="title" id="title" required>
                 </div>
                 
                 <div class="add-product-photo">
-					<%for(pAttach attach : attachList){ %>
-					<label class="input-file-button" for="prev-<%=attach.getNo() %>">
-						<span class="add-product-img<%=attach.getNo() %>">
-							<img id="<%=attach.getNo() %>" src="<%=request.getContextPath() %>/upload/market/<%=attach.getRenamedFileName() %>"
+                <c:if test="${not empty attachList}">
+                <c:forEach items="${attachList}" var="attach"> 
+					<label class="input-file-button" for="prev-${attach.no}">
+						<span class="add-product-img${attach.no}">
+							<img id="${attach.no}" src="<c:url value="/upload/market/${attach.renamedFileName}"/>"
 							 width="82px" height="82px">
-							 <button type="button" onclick="deleteFile(<%=attach.getNo() %>)">삭제</button>
+							 <button type="button" onclick="deleteFile(${attach.no})">삭제</button>
 		                </span>
 					</label>
-					<input type="file" name="prev-<%=attach.getNo() %>" id="prev-<%=attach.getNo() %>" style="display:none;" accept="image/*" onchange="setThumbnail(event)"/>
-					<% } %>
-					
+					<input type="file" name="prev-${attach.no}" id="prev-${attach.no}" style="display:none;" accept="image/*" onchange="setThumbnail(event)"/>
+					</c:forEach>
+					</c:if>
                     <label class="input-file-button" for="newBox0"><span class="add-product-img-new0">클릭하면 사진추가 [+]</span></label>
 					<input type="file" name="newBox0" id="newBox0" style="display:none;" accept="image/*" onchange="setThumbnail(event)"/>
 					<!-- <div class="newly-added-img">
@@ -62,10 +64,10 @@
 				</div>
 
                 <div class="add-product-price">
-                    <input type="number" name="price" value="<%=product.getPrice()%>" required>
+                    <input type="number" name="price" value="${product.price}" required>
                 </div>
                 <div class="add-product-comment">
-                    <textarea name="description" id="description" cols="30" rows="10" required><%=product.getDescription() %></textarea>
+                    <textarea name="description" id="description" cols="30" rows="10" required>${product.description}</textarea>
                 </div>
             	<input class="add-product-submit" type="submit" name="" id="" value="등록">	
             </form>
@@ -195,4 +197,4 @@ function createNewBox(){
 	$('div.add-product-photo').append($input);
 }
 </script>
-<%@ include file="/WEB-INF/views/common/footer.jsp" %>
+<jsp:include page="/WEB-INF/views/common/footer.jsp"/>

@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
+
+*{
+font-family: 'Nanum Gothic', sans-serif;
+}
+
 body {
 	margin: 0 auto;
 }
@@ -265,6 +271,7 @@ h1 {
 	display: inline-block;
 	background-color: #fff;
 	border-radius: 8px;
+	border: 1px solid #e9ecef;
 	overflow: hidden;
 }
 
@@ -272,6 +279,12 @@ h1 {
 	width: 270px;
 	height: 160px;
 	background-color: #efeae1;
+}
+
+.thumbnail img{
+	width:270px;
+	height:160px;
+	object-fit :cover;
 }
 
 .product-title {
@@ -338,8 +351,8 @@ h1 {
 }
 
 .login-container {
-	width: 280px;
-	height: 280px;
+	width: 350px;
+	height: 350px;
 	padding: 30px 5px;
 	margin: 0 auto;
 	text-align: center;
@@ -355,10 +368,10 @@ h1 {
 
 .login-icon {
 	display: inline-block;
-	width: 220px;
-	height: 30px;
+	width: 300px;
+	height: 50px;
 	padding: 0;
-	margin: 0;
+	margin-bottom: 15px;
 	border: 1px solid rgb(189, 189, 189);
 	border-radius: 5px;
 	background-color: rgb(189, 189, 189);
@@ -391,17 +404,22 @@ h1 {
 
 .login-form input {
 	float: right;
-	width: 170px;
-	height: 30px;
+	width: 220px;
+	height: 50px;
 	margin: 0 0 0px 0;
 	border: 0;
 }
+.btns {
+	display: flex;
+	justify-content: center;
+}
+
 
 .btns input {
 	display: inline-block;
 	width: 80px;
 	height: 30px;
-	margin: 0 28px;
+	margin: 0 auto;
 	border: 0;
 	background-color: rgb(255, 255, 255, 0);
 	color: grey;
@@ -416,26 +434,32 @@ h1 {
 }
 
 /* ++++++++++++++++++++++++MyPage+++++++++++++++++++++++= */
+.member-container{
+	margin :0 auto 220px;
+	padding-top: 80px;
+}
+
+
 .my-container {
 	width: 1024px;
 	height: auto;
 	margin: 0 auto;
-	margin-bottom: 220px;
 	overflow: hidden;
 }
 
 .my-profile-view {
-	float: right;
+	display:flex;
 	width: 1024px;
-	height: 380px;
 	background-color: rgb(243, 243, 243);
 	overflow: hidden;
 }
 
 .my-profile-icon {
-	float: left;
+	display :flex;
+	flex-direction : column;
+	justify-content : center;
+	padding: 1rem;
 	width: 324px;
-	height: 420px;
 	background-color: rgb(224, 224, 224);
 }
 
@@ -443,7 +467,6 @@ h1 {
 	width: 120px;
 	height: 120px;
 	margin: 0 auto;
-	margin-top: 140px;
 	background-color: rgb(173, 173, 173);
 	background-position: center;
 	overflow: hidden;
@@ -460,21 +483,20 @@ h1 {
 }
 
 .my-mini-container {
-	float: right;
+	display : flex;
 	width: 700px;
-	height: 420px;
 }
 
 .my-profile-good {
-	float: left;
+	display : flex;
+	justify-content : center;
+	align-items : center;
 	width: 200px;
-	height: 420px;
 	text-align: center;
 }
 
 .my-profile-good h3 {
-	float: left;
-	margin-top: 190px;
+ margin :0;
 }
 
 .heart {
@@ -486,18 +508,18 @@ h1 {
 	float: left;
 	width: 30px;
 	height: 30px;
-	margin: 220px 20px 0 50px;
 }
 
 .my-profile-market-count {
-	float: left;
+	display : flex;
+	justify-content : center;
+	align-items: center;
 	width: 200px;
-	height: 420px;
 	text-align: center;
 }
 
 .my-profile-market-count h3 {
-	margin-top: 220px;
+	
 }
 
 .my-profile-menu {
@@ -974,7 +996,7 @@ footer {
 
 .add-product-photo {
 	width: 800px;
-	height: 120px;
+	height: 9rem;
 	border-bottom: 1px solid rgb(194, 194, 194);
 }
 
@@ -1225,13 +1247,7 @@ body {font-family: Verdana, sans-serif; margin:0}
 
 .mySlides {display: none}
 
-.mySlides img {
-    width: 1000px;
-    height: 480px;
-    vertical-align: middle;
-    object-fit: cover;
-    margin-top:80px;
-}
+
 
 /* Slideshow container */
 .slideshow-container {
@@ -1330,10 +1346,10 @@ body {font-family: Verdana, sans-serif; margin:0}
 body {font-family: Verdana, sans-serif; margin:0}
 .mySlides {display: none}
 .mySlides img {
-    width: 1000px;
+    width: 100%;
     height: 480px;
     vertical-align: middle;
-    object-fit: cover;
+    object-fit: scale-down;
     margin-top:80px;
 }
 
@@ -1431,7 +1447,7 @@ body {font-family: Verdana, sans-serif; margin:0}
 }
 
 /* ========================== 폰트 적용 =============================== */
-
+/* 
 @font-face {
       src : url("/upload/report/");
       font-family: "jua"
@@ -1440,4 +1456,4 @@ body {font-family: Verdana, sans-serif; margin:0}
 * {
     font-family: "jua";
 }
-
+*/

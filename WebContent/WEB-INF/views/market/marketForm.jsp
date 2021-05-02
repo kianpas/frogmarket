@@ -1,17 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/common/header.jsp" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<jsp:include page="/WEB-INF/views/common/header.jsp" />
     <!-- section시작 -->
     <section>
         <div class="add-product-container">
             <form
 			name="marketEnrollFrm"
-			action="<%=request.getContextPath() %>/market/marketEnroll" 
+			action="<c:url value="/market/marketEnroll"/>" 
 			method="post" enctype="multipart/form-data">
                 <div class="add_product-top">
                     <h1>상품등록</h1>
                     <!-- writer의 value는 loginMember의 getId를 해야 함. -->
-                    <input type="hidden" name="writer" value="<%= loginMember.getMemberId() %>"/>
+                    <input type="hidden" name="writer" value="${loginMember.memberId}"/>
                     
                     <select name="status" style="display:none">
                         <option value="new" selected="selected">판매중</option>

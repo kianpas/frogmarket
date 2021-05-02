@@ -22,7 +22,7 @@
 				<form id="targetFrm"
 					action="<%=request.getContextPath()%>/report/reportFinder">
 	                <input type="text" name="searchTarget" id="searchTarget"
-	                	value="<%= ((searchTarget == null || searchTarget.isEmpty()) ? "" : searchTarget) %>"
+	                	value="${empty searchTarget ? '': searchTarget}"
 	                	size="25" placeholder="아이디 검색"/>
 				</form>
 			</div>

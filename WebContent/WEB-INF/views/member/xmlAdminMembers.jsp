@@ -2,11 +2,14 @@
 <%@page import="member.model.vo.Member"%>
 <%@page import="member.model.service.MemberService"%>
 <%@page import="java.util.List"%>
+
 <%@ page language="java" contentType="text/xml; charset=UTF-8"
 	pageEncoding="utf-8"%>
+
 <%
 	List<Member> alist = (List<Member>) request.getAttribute("adminlist");
 %>
+
 <style>
 	table#tbl-member th, table#tbl-member td {border:1px solid gray; padding:10px 20px; }
 </style>
@@ -22,7 +25,8 @@
 				<th>회원삭제</th>
 			</tr>
 		</thead>
-		<tbody>
+		<tbody>	
+		
 		<% if(alist == null || alist.isEmpty()){ %>
 			<tr>
 				<td colspan="10" style="text-align:center;"> 조회된 회원이 없습니다. </td>

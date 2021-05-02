@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/common/header.jsp" %>
+ <jsp:include page="/WEB-INF/views/common/header.jsp"/>
+
    
   <!-- section시작 -->
     <section>
@@ -10,7 +11,7 @@
 				method="post" enctype="multipart/form-data">
                 <div class="add-report-top">
                     <h1>신고 등록</h1>
-                    <input type="hidden" name="writer" value="<%= loginMember.getMemberId() %>"/>
+                    <input type="hidden" name="writer" value="${loginMember.memberId}"/>
                 </div>
                 <div class="add-report-target">
                     <input placeholder="신고할 대상의 아이디를 입력하세요" type="text" name="target" id="target">
@@ -82,5 +83,4 @@
 		$('div.add-report-photo').append($input);
 	}
 </script>
-
-<%@ include file="/WEB-INF/views/common/footer.jsp" %>
+<jsp:include page="/WEB-INF/views/common/footer.jsp"/>

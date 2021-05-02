@@ -7,8 +7,8 @@
 <%@page import="market.model.vo.Product"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/common/header.jsp" %>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<jsp:include page="/WEB-INF/views/common/header.jsp"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/css/lightbox.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/js/lightbox.min.js"></script>
 <%
@@ -17,13 +17,6 @@
 	List<pAttach> attachList = (List<pAttach>)request.getAttribute("attachList");
 	List<ProductCommentExt> commentList = (List<ProductCommentExt>)request.getAttribute("commentList");
 
-	 boolean editable = 
-				loginMember != null &&
-				(
-					loginMember.getMemberId().equals(member.getMemberId())
-					|| MemberService.ADMIN_ROLE.equals(loginMember.getMemberRole())
-					
-				);
 %>
 
  <!-- section시작 -->
@@ -60,96 +53,103 @@
             <div class="seller-title">
             <form id="targetMemberFrm" method="get" style="margin: 0; padding: 0;">
                 <div class="seller-icon" onclick="targetPage();" style="cursor: pointer;">
-					<% if(member.getIcon() == null || member.getIcon().isEmpty()){ %>
-					<img src="<%= request.getContextPath() %>/img/icon1.jpg" alt="">
-					<% } else { %>
-					<img src="<%= request.getContextPath() %>/img/<%= member.getIcon() %>" alt="">
-					<% } %>
-					<input type="hidden" name="memberId" value="<%= member.getMemberId() %>"/>
+                <c:choose>
+                <c:when test="${empty member.icon}">
+					<img src="<c:url value="/img/icon1.jpg"/>" alt="">
+					</c:when>
+					<c:otherwise>
+					<img src="<c:url value="/img/${member.icon}"/>" alt="">
+					</c:otherwise>
+					 </c:choose>
+					<input type="hidden" name="memberId" value="${member.memberId}"/>
                 </div>
                 </form>
                 <div class="seller-profile">
                     <div class="seller-profile-info">
-                        <h3><%=member.getNickId() %></h3>
+                        <h3>${member.nickId}</h3>
                     </div>
                     <div class="seller-good-info">
-                    	<%if(("new").equals(product.getStatus())){ %>
+                    	<c:choose>
+                    	<c:when test="${product.status eq 'new'}">
 						<h3 style="color: #ff8a3d;">판매중</h3>
-						<%}else if(("reserved").equals(product.getStatus())){ %>
+						</c:when>
+						<c:when test="${product.status eq 'reserved'}">
 						<h3 style="color: red;">예약중</h3>
-						<% }else{ %>
+						</c:when>
+						<c:otherwise>
 						<h3 style="color: #b0b0b0;">판매완료</h3>
-						<% } %>
+						</c:otherwise>
+						</c:choose>
 					</div><div class="seller-good-info" style="margin-right: 20px;">
-                    	<h3 style="color: #b78f8f;"><%= product.getArea() %></h3>
+                    	<h3 style="color: #b78f8f;">${product.area}</h3>
 					</div>
 					<div class="seller-good-info" style="margin-right: 20px;">
-                        <h3>좋아요 : <%=member.getGoodScore() %></h3>
+                        <h3>좋아요 : ${member.goodScore}</h3>
                     </div>
                 </div>
             </div>
             <div class="commet-container">
-                <h1><%=product.getTitle() %></h1>
+                <h1>${product.title}</h1>
                 <br>
-                <span><%=product.getArea() %></span>
-                <h3><%=product.getPrice() %>원</h3>
-                <span><%=product.getDescription() %></span>
+                <span>${product.area}</span>
+                <h3>${product.price}원</h3>
+                <span>${product.description}</span>
             </div>
-			<%
-				if (loginMember != null) {
-			%>
+		
+			<c:if test="${not empty loginMember}">
+			
 			<div class="market-up-del-container">
 				<input type="button" style="width: 100px; border-radius: 80px;" value="장바구니" onclick="addCart();">
-			<%
-				if (editable) {
-			%>
+			<c:if test="${loginMember.memberId eq member.memberId or loginMember.memberRole eq MemberService.ADMIN_ROLE}">
 				<input type="button" value="삭제" onclick="deleteProduct()">
 				<input type="button" value="수정" onclick="updateProduct()">
-				<%
-					}
-				%>
+				</c:if>
 		</div>
-		<%
-			}
-		%>
+	
+		</c:if>
 		<div class="comment-reader">
                 <h3 style="margin: 10px 35px;">댓글란</h3>
-                <%if(commentList!=null && !commentList.isEmpty()) {%>
+                <c:if test="${not empty commentList}">
                 
-               	 <%for(ProductCommentExt pc : commentList) {
-               		boolean removable = loginMember != null && (loginMember.getMemberId().equals(pc.getWriter())
-        					|| "A".equals(loginMember.getMemberRole()));
-               	 %>
+                
+                <c:forEach items="${commentList}" var="pc">
+               	 
                 <div class="reader-inbox">
             		<form id="targetMemberFrm" method="get" style="margin: 0; padding: 0;">
                     <div class="comment-reader-icon" onclick="targetPage();" style="cursor: pointer;">
-                    	<% if(pc.getIcon() == null || pc.getIcon().isEmpty()){ %>
-							<img src="<%= request.getContextPath() %>/img/icon1.jpg">
-						<% } else { %>
-							<img src="<%= request.getContextPath() %>/img/<%= pc.getIcon() %>">
-						<% } %>
-					<input type="hidden" name="memberId" value="<%= pc.getMemberId() %>"/>
+                    	<c:choose>
+                    	<c:when test="${empty pc.icon}">
+                    	
+							<img src="<c:url value="/img/icon1.jpg"/>">
+							</c:when>
+						<c:otherwise>
+							<img src="<c:url value="/img/${pc.icon}"/>">
+						</c:otherwise>
+						</c:choose>
+					<input type="hidden" name="memberId" value="${pc.memberId}"/>
                     </div>
                     </form>
-                    <h4><%=pc.getNickId() %></h4>
-                    <p><%=pc.getContent() %></p>
-                    <p><%=pc.getRegDate() %></p>
-                      <%if(removable) {%>
+                    <h4>${pc.nickId}</h4>
+                    <p>${pc.content}</p>
+                    <p>${pc.regDate}</p>
+                   
+                      <c:if test="${not empty loginMember and loginMemeber.memberId eq pc.writer or loginMember.memberRole eq MemberService.ADMIN_ROLE}">
                    <input type="button" value="삭제" class="comment-delete"> 
-                   <input type="hidden" value="<%=pc.getNo() %>" class="comment-no">
-                   <%} %>
-                 
+                   <input type="hidden" value="${pc.no}" class="comment-no">
+                   </c:if>
+                   
                 </div>
-               	 <%} %>
-                <%} %>
+                </c:forEach>
+               
+                </c:if>
           
             </div>
             <div class="comment-writer">
-                   <form action="<%= request.getContextPath() %>/market/marketCommentInsert" method="post" name="marketCommentFrm">
+                   <form action="<c:url value="/market/marketCommentInsert"/>" method="post" name="marketCommentFrm">
                 <div class="comment_inbox">
-                    <h3 class="comment_inbox_name"><%=loginMember != null ? loginMember.getNickId() : "" %></h3>
-                    <input type="hidden" name="boardNo" value="<%=product.getNo()%>" />
-               		<input type="hidden" name="writer" value="<%=loginMember!=null? loginMember.getMemberId():"" %>" />
+                    <h3 class="comment_inbox_name">${not empty loginMember ? loginMember.nickId : ''}</h3>
+                    <input type="hidden" name="boardNo" value="${product.no}"/>
+               		<input type="hidden" name="writer" value="${not empty loginMember ? loginMember.memberId : ''}" />
                     <textarea placeholder="댓글을 남겨보세요" rows="1" class="comment_inbox_text" name="content"></textarea>
                 </div>
                 <div class="register_box">
@@ -160,24 +160,24 @@
         </div>
     </section>  
     <!-- section끝 -->
-    
-   <%if(loginMember !=null) {%>
- <form action="<%=request.getContextPath() %>/member/addCart"  method="post" name="addCartFrm">
-    	<input type="hidden" name="boardNo" value="<%=product.getNo() %>"/>
-    	<input type="hidden" name="memberId" value="<%= loginMember.getMemberId() %>"/>
+    <c:if test="${empty loginMember}">
+
+ <form action="<c:url value="/member/addCart"/>"  method="post" name="addCartFrm">
+    	<input type="hidden" name="boardNo" value="${product.no}"/>
+    	<input type="hidden" name="memberId" value="${loginMember.memberId}"/>
     </form>
-    <%}; %>
-    
-<%
-	if (editable) {
-%>
-<form action="<%=request.getContextPath()%>/market/marketDelete"
+
+    </c:if>
+
+<c:if test="${loginMember.memberId eq member.memberId or loginMember.memberRole eq MemberService.ADMIN_ROLE}">
+
+<form action="<c:url value="/market/marketDelete"/>"
 	method="post" name="productDelFrm">
-	<input type="hidden" name="no" value="<%=product.getNo()%>" />
+	<input type="hidden" name="no" value="${product.no}" />
 </form>
 <script>
 	function updateProduct(){
-		location.href = "<%=request.getContextPath()%>/market/marketUpdate?no=<%=product.getNo()%>";
+		location.href = "<c:url value='/market/marketUpdate?no=${product.no}'/>";
 	}
 	
 	function deleteProduct(){
@@ -186,19 +186,18 @@
 		}
 	}
 	</script>
-<%
-	}
-%>
-<form action="<%=request.getContextPath()%>/market/marketCommentDelete"
+
+</c:if>
+<form action="<c:url value="/market/marketCommentDelete"/>"
 	name="marketCommentDelFrm" method="post">
 	<input type="hidden" name="no" /> <input type="hidden" name="boardNo"
-		value="<%=product.getNo()%>" />
+		value="${product.no}" />
 </form>
 <script>
 
 function targetPage() {
 	$("#targetMemberFrm")
-	.attr("action","<%=request.getContextPath()%>/member/memberTarget")
+	.attr("action", "<c:url value="/member/memberTarget"/>")
 	.submit();
 }
 
@@ -216,10 +215,10 @@ function targetPage() {
 //$(document.boardCommentFrm).submit(function(){
 	//이벤트 버블링을 위해 전체 문서로 변화
 	$(document).on('submit', '[name=marketCommentfrm]', function(e){
-	<%if (loginMember == null) {%>
+	<c:if test="${empty loginMember}">
 		loginAlert();
 		return false;
-	<%}%>
+	</c:if>
 	//댓글 내용
 	var $content = $("[name=content]", e.target);
 	if(/^(.|\n)+$/.test($content.val() == false)){
