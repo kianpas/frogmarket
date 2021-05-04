@@ -46,4 +46,4 @@ Eclipse, SQL Developer, VS Code
 
 ## 사이트 이미지
 이미지 추가 
-![Alt text](/frogmarket/WebContent/img/msedge_oJqXyAJOqd.jpg)
+![Alt text](./WebContent/img/msedge_oJqXyAJOqd.jpg)
