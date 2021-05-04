@@ -45,5 +45,9 @@ Eclipse, SQL Developer, VS Code
     
 
 ## 사이트 이미지
-이미지 추가 
+메인
 ![Alt text](./WebContent/img/msedge_oJqXyAJOqd.jpg)
+게시판
+![Alt text](./WebContent/img/msedge_zzJ5ncQ0Pp.jpg)
+그래프
+![Alt text](./WebContent/img/msedge_OhGa7ymk11.jpg)
